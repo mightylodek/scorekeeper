@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
 }
@@ -14,18 +18,106 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #f8fafc;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: 1.5em;
+  color: rgb(81, 78, 78);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.keypair{
+  margin-right: 15px;
+}
+
+.plusMinusButton.t1{
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  margin: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  border-radius: 4px;
+}
+
+.plusMinusButton.t2{
+  background-color: #e14a28; /* Red */
+  border: none;
+  color: white;
+  padding: 15px 20px;
+  margin: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 24px;
+  border-radius: 4px;
+}
+
+.prefix-icon{
+  width: 45px;
+  size: 45px;
+}
+.matchStatus{
+  text-align: left;
+  width: 200px;
+  font-size: 0.5em;
+}
+
+.blockdisp{
+  display: block;
+  text-align: left;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  padding: 0.125em 1em;
+  background-color: rgba(78, 77, 77, 0.1);
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.card-header{
+  margin: 0.5em 0em;
+  font-size: 0.75em;
+}
+
+.card-footer{
+  font-size: 0.5em;
+}
+
+.score-table{
+  margin: 0.125em 0.5em;
+}
+
+.matchID{
+  font-size: 0.125em;
+}
+
+.teamName{
+  text-align: left;
+  width: 10em;
+  color:rgb(101, 196, 98)
+}
+
+.teamScore{
+  width: 50px;
 }
 
 @keyframes App-logo-spin {
