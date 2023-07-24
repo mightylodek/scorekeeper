@@ -161,6 +161,9 @@ const Match = ({ matchID, eventID }) => {
               </tr>
             </tbody>
           </table>
+          <div>
+            <button className=''>Finalize</button>
+          </div>
         </div>
       </>
     );
