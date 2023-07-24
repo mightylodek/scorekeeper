@@ -475,8 +475,6 @@ const Players = ({ screen }) => {
             />
           </div>
         ))}
-
-        <span>Hello there!</span>
       </Container>
     </>
   );

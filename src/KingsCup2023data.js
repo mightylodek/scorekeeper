@@ -29,7 +29,7 @@ const initialdata = {
       name: "David Gagliano",
     },
     p08: { id: "p08", wins: 3, losses: 1, pdiff: 12, seed: 0, name: "Mike B" },
-    p09: { id: "p09", wins: 3, losses: 2, pdiff: 21, seed: 0, name: "Tom S" },
+    p09: { id: "p09", wins: 3, losses: 1, pdiff: 21, seed: 0, name: "Tom S" },
     p10: { id: "p10", wins: 2, losses: 2, pdiff: -2, seed: 0, name: "Mickey" },
     p11: { id: "p11", wins: 4, losses: 0, pdiff: 28, seed: 0, name: "Joe S" },
     p12: { id: "p12", wins: 2, losses: 2, pdiff: 6, seed: 0, name: "Diaferio" },
