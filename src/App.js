@@ -5,6 +5,7 @@ import Match from "./screens/match";
 import Landing from "./Landing";
 import Players from "./Players";
 import Teams from "./screens/Teams";
+import Email from "./playground/email";
 
 function App() {
   const [matchID, setMatchID] = useState(" ");
@@ -42,6 +43,9 @@ function App() {
       break;
     case "teams":
       return <Teams />;
+      break;
+    case "email":
+      return <Email />;
       break;
     default:
       return <Landing screen={screen} />;

@@ -117,8 +117,11 @@ export function ShowAllMatchScores() {
             <div className='inline-block'>
               <h5>All Matches:</h5>
               {matches.map((e, i) => (
-                <div className='center  bg-sky-50 mb-8'>
-                  <div className='card inline-block' key={e._id.toHexString()}>
+                <div className='center mb-8 border-gray-100 border-2 p-4 shadow-xl'>
+                  <div
+                    className='inline-block  p-1 rounded-md '
+                    key={e._id.toHexString()}
+                  >
                     <p>{e.eventName}</p>
                     <table className='score-table'>
                       <tbody className='teamPill'>
@@ -135,7 +138,9 @@ export function ShowAllMatchScores() {
                           <td className='prefix-icon'>
                             {e.winner === e.team2Name ? <GiMeshBall /> : ""}
                           </td>
-                          <td className='teamName'>{e.team2Name}</td>
+                          <td className='text-red-400 w-0 text-left'>
+                            {e.team2Name}
+                          </td>
                           <td className='teamScore'>{e.team2Score}</td>
                         </tr>
                       </tbody>
@@ -156,10 +161,12 @@ export function ShowAllMatchScores() {
                       </a>
                     </div>
                   </div>
-                  <div className='inline-block center'>
+                  <div className='inline-block center ml-4 text-gray-500'>
                     <QRCodeSVG
                       value={`${varObj.scoreURL}?screen=onematch&matchID=${e._id}`}
+                      fgColor='#0fa5e9'
                     />
+                    <span className='text-sm'>Scan to score match</span>
                   </div>
                 </div>
               ))}

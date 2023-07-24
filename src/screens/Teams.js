@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Menu } from "../menu";
 import styled from "styled-components";
 import initialdata from "../initialdata";
-import Players from "../Players";
+//import Players from "../Players";
 import { createTeams, populateMatches } from "../kingsTeams";
 
 const fleshOutMatchData = (arr, bracketRound, eventName) => {};

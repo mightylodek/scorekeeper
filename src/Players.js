@@ -18,10 +18,11 @@ const Pinput = styled.input`
   padding: 2px;
   background-color: transparent;
   font-size: 12px;
-  height: 20px;
+  height: 22px;
   display: inline;
   width: 50px;
   font-weight: 400;
+  border: none;
 `;
 
 const Pspan = styled.span`
@@ -51,10 +52,11 @@ const Pnameinput = styled.input`
   padding: 2px;
   background-color: transparent;
   font-size: 12px;
-  height: 20px;
+  height: 22px;
   display: inline;
   width: 120px;
   font-weight: 700;
+  border: none;
 `;
 
 const Plabel = styled.label`
