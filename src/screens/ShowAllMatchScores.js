@@ -32,6 +32,28 @@ const handleCourtSelection = async (e) => {
   console.log("did it patch?", matchId, result);
 };
 
+const QRSkeleton = () => {
+  return (
+    <div className='animate-pulse space-x-4 inline-block'>
+      <div className='rounded bg-sky-400 h-32 w-32 grid grid-cols-5 grid-rows-5'>
+        <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+        <div className='bg-transparent col-span-3 row-span-1'></div>
+        <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+        <div className='rounded bg-transparent col-span-5 row-span-3'></div>
+        <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+      </div>
+    </div>
+  );
+};
+
+const FinalQRPlaceholder = () => {
+  return (
+    <div className='flex flex-col items-center justify-center my-6'>
+      <p className='text-xxl text-red-600'>Final Score</p>
+    </div>
+  );
+};
+
 export function ShowAllMatchScores() {
   const [user, setUser] = useState();
   const [matches, setMatches] = useState([]);
@@ -94,6 +116,13 @@ export function ShowAllMatchScores() {
 
 */
 
+  const handleOverrideMatch = (e) => {
+    console.log(
+      "Handle override of match...",
+      e.nativeEvent.target.dataset.matchid
+    );
+  };
+
   useEffect(() => {
     //console.clear();
     const login = async () => {
@@ -127,7 +156,11 @@ export function ShowAllMatchScores() {
               <h5>All Matches:</h5>
               {matches.map((e, i) => (
                 <div
-                  className='center mb-8 border-gray-100 border-2 p-4 shadow-xl'
+                  className={
+                    e.matchStatus === "Final"
+                      ? "bg-slate-200 center m-2 mb-8 border-slate-300 border-2 p-4 shadow-xl"
+                      : "center m-2 mb-8 border-gray-100 border-2 p-4 shadow-xl"
+                  }
                   key={e._id.toHexString()}
                 >
                   <div className='inline-block  p-1 rounded-md '>
@@ -176,17 +209,22 @@ export function ShowAllMatchScores() {
                     </div>
                   </div>
                   <div className='inline-block center ml-4 text-gray-500'>
-                    {e.locationName === "Unassigned" ? (
-                      <div className='items-center'>
-                        <div className='animate-pulse space-x-4 inline-block'>
-                          <div className='rounded bg-sky-400 h-32 w-32 grid grid-cols-5 grid-rows-5'>
-                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
-                            <div className='bg-transparent col-span-3 row-span-1'></div>
-                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
-                            <div className='rounded bg-transparent col-span-5 row-span-3'></div>
-                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
-                          </div>
+                    {e.matchStatus === "Final" ? (
+                      <div
+                        className='items-center p-4 bg-slate-700 inline-block hover:bg-slate-600'
+                        data-matchid={e._id}
+                        onClick={(e) => handleOverrideMatch(e)}
+                      >
+                        <FinalQRPlaceholder />
+                        <div className='block'>
+                          <span className='text-sm text-slate-300'>
+                            Click to override
+                          </span>
                         </div>
+                      </div>
+                    ) : e.locationName === "Unassigned" ? (
+                      <div className='items-center'>
+                        <QRSkeleton />
                         <div className='block'>
                           <span className='text-sm'>
                             Select location to score match
@@ -217,7 +255,12 @@ export function ShowAllMatchScores() {
                       data-matchid={e._id}
                       onChange={(e) => handleCourtSelection(e)}
                       value={e.locationName}
-                      className='border-none bg-opacity-5 bg-sky-500'
+                      className={
+                        e.locationName === "Unassigned"
+                          ? "animate-pulse border-none bg-opacity-5 enabled:bg-sky-500 disabled:bg-transparent"
+                          : "border-none bg-opacity-5 enabled:bg-sky-500 disabled:bg-transparent"
+                      }
+                      disabled={e.matchStatus === "Final" ? true : false}
                     >
                       <option value='Unassigned'>
                         Select a location to begin

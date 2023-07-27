@@ -48,7 +48,7 @@ export const FinalizeMatch = (matchData) => {
     locationName: matchData.locationName,
     maxScore: matchData.maxScore,
     winByTwo: matchData.winByTwo,
-    winnerName: winningTeam,
+    winner: winningTeam,
     wonBy: winningDiff,
     matchStatus: "Final",
     endTime: matchEndTime,
