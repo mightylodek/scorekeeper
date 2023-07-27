@@ -1,14 +1,12 @@
 import "../App.css";
-
-//import { Routes, Route } from "react-router-dom";
-//import Search from "./components/search";
 import React, { useState, useEffect, useRef } from "react";
 import * as Realm from "realm-web";
-//import { FaCrown } from "react-icons/fa";
 import { GiMeshBall } from "react-icons/gi";
 import { Menu } from "../menu";
 import { QRCodeSVG } from "qrcode.react";
 import varObj from "../config.json";
+import initialdata from "../initialdata";
+import { patchMatchApiAsync } from "../FinalizeMatch";
 
 const app = new Realm.App({ id: "real-time-tourney-yfwtp" });
 
@@ -21,9 +19,19 @@ const app = new Realm.App({ id: "real-time-tourney-yfwtp" });
       </Routes>
  */
 
+const handleCourtSelection = async (e) => {
+  e.preventDefault();
+  const matchId = e.nativeEvent.target.dataset.matchid;
+  const matchLocation = { locationName: `${e.nativeEvent.target.value}` };
+
+  const result = await patchMatchApiAsync(matchId, matchLocation);
+  console.log("did it patch?", matchId, result);
+};
+
 export function ShowAllMatchScores() {
   const [user, setUser] = useState();
   const [matches, setMatches] = useState([]);
+  const [locations, setLocations] = useState(initialdata.Locations);
   //const [bracketName, setBracketName] = useState("");
   //const [bracketRound, setBracketRound] = useState("");
 
@@ -34,9 +42,7 @@ export function ShowAllMatchScores() {
     try {
       const allMatches = await collection.find();
       if (allMatches.length > 0) {
-        console.log("allMatches.length...", allMatches.length);
-        console.log("pre-sorted...", allMatches);
-        const sortedMatches = allMatches.sort((a, b) => {
+        const sortedMatches = await allMatches.sort((a, b) => {
           const aval =
             (a.bracketName === "Prelims" ? "1" : "2") +
             a.bracketRound +
@@ -52,9 +58,8 @@ export function ShowAllMatchScores() {
           }
         });
 
-        console.log("sorted matches...", sortedMatches);
         setMatches(sortedMatches);
-        console.log("matches after setMatches()...", matches);
+        console.log("matches...", matches);
       } else {
         console.log("no records returned from DB");
       }
@@ -97,12 +102,12 @@ export function ShowAllMatchScores() {
       const collection = mongodb.db("node-api").collection("matches");
 
       // Fetch all matches and store them into the matches state variable
-      fetchAndSetMatches(collection);
+      await fetchAndSetMatches(collection);
 
       //Everytime a change happens in the stream, add it to the list of events
 
       for await (const change of collection.watch()) {
-        fetchAndSetMatches(collection);
+        await fetchAndSetMatches(collection);
       }
     };
     login();
@@ -117,11 +122,11 @@ export function ShowAllMatchScores() {
             <div className='inline-block'>
               <h5>All Matches:</h5>
               {matches.map((e, i) => (
-                <div className='center mb-8 border-gray-100 border-2 p-4 shadow-xl'>
-                  <div
-                    className='inline-block  p-1 rounded-md '
-                    key={e._id.toHexString()}
-                  >
+                <div
+                  className='center mb-8 border-gray-100 border-2 p-4 shadow-xl'
+                  key={e._id.toHexString()}
+                >
+                  <div className='inline-block  p-1 rounded-md '>
                     <p>{e.eventName}</p>
                     <table className='score-table'>
                       <tbody className='teamPill'>
@@ -152,7 +157,12 @@ export function ShowAllMatchScores() {
                     </div>
                     <div>
                       <a
-                        href={"index.html?screen=onematch&matchID=" + e._id}
+                        href={
+                          `index.html?screen=onematch&matchID=${e._id}` +
+                          (e.locationName !== null
+                            ? `&location=${e.locationName}`
+                            : "")
+                        }
                         target='_blank'
                       >
                         <span className='matchID'>
@@ -162,11 +172,58 @@ export function ShowAllMatchScores() {
                     </div>
                   </div>
                   <div className='inline-block center ml-4 text-gray-500'>
-                    <QRCodeSVG
-                      value={`${varObj.scoreURL}?screen=onematch&matchID=${e._id}`}
-                      fgColor='#0fa5e9'
-                    />
-                    <span className='text-sm'>Scan to score match</span>
+                    {e.locationName === "Unassigned" ? (
+                      <div className='items-center'>
+                        <div className='animate-pulse space-x-4 inline-block'>
+                          <div className='rounded bg-sky-400 h-32 w-32 grid grid-cols-5 grid-rows-5'>
+                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+                            <div className='bg-transparent col-span-3 row-span-1'></div>
+                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+                            <div className='rounded bg-transparent col-span-5 row-span-3'></div>
+                            <div className='rounded bg-sky-500  col-span-1 row-span-1'></div>
+                          </div>
+                        </div>
+                        <div className='block'>
+                          <span className='text-sm'>
+                            Select location to score match
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className='flex flex-col items-center justify-center'>
+                        <QRCodeSVG
+                          value={
+                            `index.html?screen=onematch&matchID=${e._id}` +
+                            (e.locationName !== null
+                              ? `&location=${e.locationName}`
+                              : "")
+                          }
+                          fgColor='#0fa5e9'
+                        />
+                        <div className='block mt-2'>
+                          <span className='text-sm block'>
+                            Scan QRCode to score match
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className=''>
+                    <select
+                      data-matchid={e._id}
+                      onChange={(e) => handleCourtSelection(e)}
+                      value={e.locationName}
+                      className='border-none bg-opacity-5 bg-sky-500'
+                    >
+                      <option value='Unassigned'>
+                        Select a location to begin
+                      </option>
+                      {locations.map((l, j) => (
+                        <option key={j} value={l}>
+                          Location: {l}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               ))}

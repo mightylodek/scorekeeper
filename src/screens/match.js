@@ -6,10 +6,13 @@ import { LuMinusSquare } from "react-icons/lu";
 import { LuPlusSquare } from "react-icons/lu";
 import "../App.css";
 import varObj from "../config.json";
+import { patchMatchApiAsync, FinalizeMatch } from "../FinalizeMatch";
 
 import * as Realm from "realm-web";
 
 const app = new Realm.App({ id: "real-time-tourney-yfwtp" });
+
+/**
 
 const patchMatchApiAsync = async (id, obj) => {
   const rawResponse = await fetch(`${varObj.ioURL}/matches/${id}`, {
@@ -24,25 +27,26 @@ const patchMatchApiAsync = async (id, obj) => {
   return content;
 };
 
+*/
+
+const handleFinalizeMatch = (e, f) => {
+  e.preventDefault();
+  console.log("Entered into handleFinalizeMatch with data...", f);
+  const result = FinalizeMatch(f);
+  console.log("result of handlwFinalizeMatch...", result);
+};
+
 const Match = ({ matchID, eventID }) => {
   const [m, setM] = useState({});
   const [ready, setReady] = useState(false);
   const stateRef = useRef();
   stateRef.current = m;
-
-  console.log("matchID in Match()...", matchID);
-  console.log("eventID in Match()...", eventID);
-
   const fetchAndSetMatch = async (collection) => {
-    console.log("Entered fetchandSetMatch...");
     const matchData = await FetchOneMatch(matchID);
-    console.log("matchData after FetchOneMatch...", matchData);
-    setM(matchData);
-    console.log("m after setM...", m);
+    await setM(matchData);
   };
 
   useEffect(() => {
-    console.warn("matchID in Match()...", matchID);
     const login = async () => {
       //Authenticate anonymously
       const user = await app.logIn(Realm.Credentials.anonymous());
@@ -65,7 +69,7 @@ const Match = ({ matchID, eventID }) => {
     setReady(true);
   }, []);
 
-  console.log("matchID from useLoaderData()...", matchID);
+  //console.log("matchID from useLoaderData()...", matchID);
 
   if (ready === false) {
     return;
@@ -80,7 +84,7 @@ const Match = ({ matchID, eventID }) => {
             {m.bracketRound ? m.bracketRound : ""}{" "}
             {m.matchNumber ? "Match# " + m.matchNumber : ""}
           </h3>
-
+          <p className='text-lg'>Assigned Location: {m.locationName}</p>
           <table>
             <tbody className='teamPill'>
               <tr>
@@ -126,7 +130,7 @@ const Match = ({ matchID, eventID }) => {
                 <td className='prefix-icon'>
                   {m.winner === m.team2Name ? <GiMeshBall /> : ""}
                 </td>
-                <td className='teamName'>{m.team2Name}</td>
+                <td className='text-red-400 w-0 text-left'>{m.team2Name}</td>
                 <td className='teamScore'>{m.team2Score}</td>
                 <td className='plusMinus'>
                   <button
@@ -162,7 +166,9 @@ const Match = ({ matchID, eventID }) => {
             </tbody>
           </table>
           <div>
-            <button className=''>Finalize</button>
+            <button className='' onClick={(e) => handleFinalizeMatch(e, m)}>
+              Finalize
+            </button>
           </div>
         </div>
       </>

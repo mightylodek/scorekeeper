@@ -33,6 +33,7 @@ const postMatchApiAsync = async (matchData = {}) => {
 
   return content;
 };
+
 /**
  *
  * @param {*} partialMD Partial match data, team names, event/bracket/round names, match number, etc
@@ -61,7 +62,8 @@ const PostMatch = (partialMD) => {
     winnerNextMatchPosition: null,
     loserNextMatch: null,
     loserNextMatchPosition: null,
-    status: partialMD.status,
+    matchStatus: partialMD.matchStatus,
+    locationName: partialMD.locationName,
   };
   console.log("matchData...", matchData);
   return postMatchApiAsync(matchData);

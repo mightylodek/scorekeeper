@@ -131,7 +131,8 @@ export const populateMatches = (
       team2PlayerNames: t2PlayerNames,
       maxScore: maxScore,
       winByTwo: winByTwo,
-      status: "Generated",
+      matchStatus: "Generated",
+      locationName: "Unassigned",
     };
     PostMatch(partialMD);
   });
