@@ -5,7 +5,7 @@ import { GiMeshBall } from "react-icons/gi";
 import { LuMinusSquare } from "react-icons/lu";
 import { LuPlusSquare } from "react-icons/lu";
 import "../App.css";
-import varObj from "../config.json";
+//import varObj from "../config.json";
 import { patchMatchApiAsync, FinalizeMatch } from "../FinalizeMatch";
 
 import * as Realm from "realm-web";
@@ -62,6 +62,7 @@ const Match = ({ matchID, eventID }) => {
       //Everytime a change happens in the stream, add it to the list of events
 
       for await (const change of collection.watch()) {
+        console.log("Change", change);
         fetchAndSetMatch(collection);
       }
     };
@@ -95,7 +96,7 @@ const Match = ({ matchID, eventID }) => {
                 <td className='teamScore'>{m.team1Score}</td>
                 <td className='plusMinus'>
                   <button
-                    className='plusMinusButton t1'
+                    className='disabled:bg-slate-400 enabled:bg-green-600 border-none text-white py-4 px-5 my-3 mx-2 text-center text-xxl rounded-md '
                     onClick={(e) => {
                       e.preventDefault();
                       console.log("Clicked Minus T1");
@@ -104,13 +105,14 @@ const Match = ({ matchID, eventID }) => {
                       });
                       //fetchAndSetMatch(m._id);
                     }}
+                    disabled={m.matchStatus === "Final" ? true : false}
                   >
                     <LuMinusSquare />
                   </button>
                 </td>
                 <td className='plusMinus'>
                   <button
-                    className='plusMinusButton t1'
+                    className='disabled:bg-slate-400 enabled:bg-green-600 border-none text-white py-4 px-5 my-3 mx-2 text-center text-xxl rounded-md '
                     onClick={(e) => {
                       e.preventDefault();
                       console.log("Clicked Plus T1");
@@ -119,6 +121,7 @@ const Match = ({ matchID, eventID }) => {
                       });
                       //fetchAndSetMatch(m._id);
                     }}
+                    disabled={m.matchStatus === "Final" ? true : false}
                   >
                     <LuPlusSquare />
                   </button>
@@ -134,7 +137,7 @@ const Match = ({ matchID, eventID }) => {
                 <td className='teamScore'>{m.team2Score}</td>
                 <td className='plusMinus'>
                   <button
-                    className='plusMinusButton t2'
+                    className='disabled:bg-slate-400 enabled:bg-red-600 border-none text-white py-4 px-5 my-3 mx-2 text-center text-xxl rounded-md '
                     onClick={(e) => {
                       e.preventDefault();
                       console.log("Clicked Minus T2");
@@ -143,13 +146,14 @@ const Match = ({ matchID, eventID }) => {
                       });
                       //fetchAndSetMatch(m._id);
                     }}
+                    disabled={m.matchStatus === "Final" ? true : false}
                   >
                     <LuMinusSquare />
                   </button>
                 </td>
                 <td className='plusMinus'>
                   <button
-                    className='plusMinusButton t2'
+                    className='disabled:bg-slate-400 enabled:bg-red-600 border-none text-white py-4 px-5 my-3 mx-2 text-center text-xxl rounded-md '
                     onClick={(e) => {
                       e.preventDefault();
                       console.log("Clicked Plus T2");
@@ -158,6 +162,7 @@ const Match = ({ matchID, eventID }) => {
                       });
                       //fetchAndSetMatch(m._id);
                     }}
+                    disabled={m.matchStatus === "Final" ? true : false}
                   >
                     <LuPlusSquare />
                   </button>
