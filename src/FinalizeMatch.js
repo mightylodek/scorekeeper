@@ -16,19 +16,20 @@ export const patchMatchApiAsync = async (id, matchData) => {
 };
 
 export const FinalizeMatch = (matchData) => {
+  const matchEndTime = new Date();
   const matchId = matchData._id;
   const winByVal = matchData.winByTwo === true ? 2 : 1;
   const winningTeam =
-    matchData.team1Score - matchData.team2Score - winByVal > 0
-      ? "team1"
-      : matchData.team2Score - matchData.team1Score - winByVal > 0
-      ? "team2"
+    matchData.team1Score - matchData.team2Score - winByVal >= 0
+      ? matchData.team1Name
+      : matchData.team2Score - matchData.team1Score - winByVal >= 0
+      ? matchData.team2Name
       : "No Winner";
   console.log("winningTeam...", winningTeam);
   const winningDiff =
-    matchData.team1Score - matchData.team2Score - winByVal > 0
+    matchData.team1Score - matchData.team2Score - winByVal >= 0
       ? matchData.team1Score - matchData.team2Score
-      : matchData.team2Score - matchData.team1Score - winByVal > 0
+      : matchData.team2Score - matchData.team1Score - winByVal >= 0
       ? matchData.team2Score - matchData.team1Score
       : 0;
   console.log("winningDiff...", winningDiff);
@@ -48,8 +49,9 @@ export const FinalizeMatch = (matchData) => {
     maxScore: matchData.maxScore,
     winByTwo: matchData.winByTwo,
     winnerName: winningTeam,
-    wonBy: matchData.team1Score >= matchData.maxScore,
+    wonBy: winningDiff,
     matchStatus: "Final",
+    endTime: matchEndTime,
   };
   console.log(
     "finalize Match called with ...",

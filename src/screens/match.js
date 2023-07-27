@@ -29,11 +29,11 @@ const patchMatchApiAsync = async (id, obj) => {
 
 */
 
-const handleFinalizeMatch = (e, f) => {
+const handleFinalizeMatch = async (e, f) => {
   e.preventDefault();
   console.log("Entered into handleFinalizeMatch with data...", f);
-  const result = FinalizeMatch(f);
-  console.log("result of handlwFinalizeMatch...", result);
+  const result = await FinalizeMatch(f);
+  console.log("result of handleFinalizeMatch...", result);
 };
 
 const Match = ({ matchID, eventID }) => {
@@ -166,7 +166,10 @@ const Match = ({ matchID, eventID }) => {
             </tbody>
           </table>
           <div>
-            <button className='' onClick={(e) => handleFinalizeMatch(e, m)}>
+            <button
+              className='rounded-md bg-sky-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500'
+              onClick={(e) => handleFinalizeMatch(e, m)}
+            >
               Finalize
             </button>
           </div>

@@ -22,7 +22,11 @@ const app = new Realm.App({ id: "real-time-tourney-yfwtp" });
 const handleCourtSelection = async (e) => {
   e.preventDefault();
   const matchId = e.nativeEvent.target.dataset.matchid;
-  const matchLocation = { locationName: `${e.nativeEvent.target.value}` };
+  const startTime = new Date();
+  const matchLocation = {
+    locationName: `${e.nativeEvent.target.value}`,
+    startTime: `${startTime}`,
+  };
 
   const result = await patchMatchApiAsync(matchId, matchLocation);
   console.log("did it patch?", matchId, result);
