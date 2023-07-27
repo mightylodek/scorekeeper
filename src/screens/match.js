@@ -167,10 +167,11 @@ const Match = ({ matchID, eventID }) => {
           </table>
           <div>
             <button
-              className='rounded-md bg-sky-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500'
+              className='rounded-md disabled:bg-slate-400 enabled:bg-sky-500 px-3.5 py-2.5 text-sm font-semibold disabled:text-slate-700 enabled:text-white shadow-sm enabled:hover:bg-sky-400 enabled:focus-visible:outline enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-sky-500'
               onClick={(e) => handleFinalizeMatch(e, m)}
+              disabled={m.matchStatus === "Final" ? true : false}
             >
-              Finalize
+              {m.matchStatus === "Final" ? "Finalized" : "Finalize"}
             </button>
           </div>
         </div>
