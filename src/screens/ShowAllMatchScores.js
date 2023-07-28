@@ -116,11 +116,11 @@ export function ShowAllMatchScores() {
 
 */
 
-  const handleOverrideMatch = (e) => {
-    console.log(
-      "Handle override of match...",
-      e.nativeEvent.target.dataset.matchid
-    );
+  const handleOverrideMatch = async (matchId) => {
+    console.log("Handle override of match...", matchId);
+    const data = { matchStatus: "Reopened" };
+    const result = await patchMatchApiAsync(matchId, data);
+    console.log("Override result...", matchId, result);
   };
 
   useEffect(() => {
@@ -211,15 +211,17 @@ export function ShowAllMatchScores() {
                   <div className='inline-block center ml-4 text-gray-500'>
                     {e.matchStatus === "Final" ? (
                       <div
-                        className='items-center p-4 bg-slate-700 inline-block hover:bg-slate-600'
+                        className='z-10 h-max w-max'
                         data-matchid={e._id}
-                        onClick={(e) => handleOverrideMatch(e)}
+                        onClick={() => handleOverrideMatch(e._id.toHexString())}
                       >
-                        <FinalQRPlaceholder />
-                        <div className='block'>
-                          <span className='text-sm text-slate-300'>
-                            Click to override
-                          </span>
+                        <div className='items-center p-4 bg-slate-700 inline-block hover:bg-slate-600'>
+                          <FinalQRPlaceholder />
+                          <div className='block'>
+                            <span className='text-sm text-slate-300'>
+                              Click to override
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ) : e.locationName === "Unassigned" ? (
