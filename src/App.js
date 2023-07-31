@@ -6,6 +6,7 @@ import Landing from "./Landing";
 import Players from "./Players";
 import Teams from "./screens/Teams";
 import Email from "./playground/email";
+import QuickCreate from "./screens/QuickCreate";
 
 function App() {
   const [matchID, setMatchID] = useState(" ");
@@ -46,6 +47,9 @@ function App() {
       break;
     case "email":
       return <Email />;
+      break;
+    case "quickcreate":
+      return <QuickCreate />;
       break;
     default:
       return <Landing screen={screen} />;

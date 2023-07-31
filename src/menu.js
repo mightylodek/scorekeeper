@@ -34,6 +34,9 @@ export const Menu = ({ screen }) => {
           Players
         </LinkButton>
         <LinkButton href='index.html?screen=email'>Enter Email</LinkButton>
+        <LinkButton href='index.html?screen=quickcreate'>
+          Quick Create
+        </LinkButton>
       </Container>
     </>
   );
